@@ -18,6 +18,9 @@ OR
 - an Arduino Pi Pico. [Fancy purple Chinese clones](https://fr.aliexpress.com/item/1005003928558306.html) are OK (this is still the genuine RP2040 chip) as long as you do not care that the pinout is completely baroque.
 - a [MAX153 Analog to Digital Converter](https://fr.aliexpress.com/item/1005005084589973.html) (yes it is expensive...)
 - a way to connect the device to the ribbon without destroying the original cable like an opened [replacement cable](https://www.digikey.com/en/products/base-product/jst-sales-america-inc/455/A09ZR09Z/588181) (choose B model).
+- a big decoupling electrolytic capacitor, typically [1000 µF - 10 volts](https://fr.aliexpress.com/item/1005002958594141.html).
+
+The sniffer can be powered by the USB cable or the sensor ribbon through CAM_VCC, but in this case it requires a large decoupling capacitor to avoid image artifacts due to voltage shift with time. If powered by USB, **do not connect anything to the CAM_VCC**, just connect CAM_GND and protocol wires.
 
 # How ?
 The device uses a MAX153 analog to digital converter. The idea comes from an [old paper](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Yerazunis%20(1999)%20An%20Inexpensive%2C%20All%20Solid-state%20Video%20and%20Data%20Recorder%20for%20Accident%20Reconstruction.pdf) claiming to use the [M64282FP artificial retina coupled with a MAX153 flash ADC](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Mitsubishi%20Integrated%20Circuit%20M64282FP%20Image%20Sensor.pdf) as a road dashcam system. This leads to [this project](https://github.com/Raphael-Boichot/Mitsubishi-M64282FP-dashcam) which uses the internal ADC of a Pi Pico but the idea here was to see if it is possible to directly intercept data during normal operation of the Game Boy Camera, like the [GB Interceptor](https://github.com/Staacks/gbinterceptor), and it requires a real external flash ADC, the SAR method used in the Pi Pico being much too slow. The MAX153 is used in its most simple way, **mode 0**, which allows a conversion in about 800 µs total, the cycle width of the Game Boy signal being 1.9 µs. The MAX153 has the advantage to have a very broad range of acceptable voltage. The scale here is set between 0 and 3.3 volts, like a real Game Boy Camera.
@@ -28,6 +31,9 @@ The two cores of the Pico are used but not in a fancy manner. Core 1 do all the 
 
 # Pinout
 ![Pinout](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout.png)
+
+# Detail of the sensor ribbon
+![](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout2.png)
 
 # Comparison before/after the MAC-GBD
 ![comparison](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/test.gif)
