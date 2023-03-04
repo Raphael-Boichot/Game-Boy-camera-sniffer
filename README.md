@@ -28,7 +28,7 @@ The device uses a MAX153 analog to digital converter. The idea comes from an [ol
 
 The data format on SD card is the simpliest possible to favor writing speed. Each boot of the Game Boy will create a session file that contains for each image 32 bytes of header information, then the raw 8 bits data for 128x120 pixels. The project comes with A Matlab Decoder but the file format is very easy to decode with any tool.
 
-The two cores of the Pico are used but not in a fancy manner. Core 1 do all the work while Core 0 deals with the internal interrupts only. I think writing to SD would be delegate to core 0 too in the furure. Using only core 0 leads to stalling every ms, which leads to 30 about jitters in every image. Some part of the code should sounds strange but remind that the code is the fruit of many trials an errors to find the optimal timings. It is stable in its current form.
+The two cores of the Pico are used but not in a fancy manner. Core 1 does all the work while Core 0 deals with the internal interrupts only. I think writing to SD would be delegate to core 0 too in the future. Using only core 0 leads to stalling every ms, which leads to about 30 jitters in every image. Some part of the code should sounds strange but remind that the code is the fruit of many trials an errors to find the optimal timings. It is stable in its current form.
 
 The image you will get will look poorly contrasted, this is normal. It appears that the Game Boy camera uses a quite limited narrow voltage range, always in the upper range. The exact register strategy is still not fully understood at the moment and this tool may help elucidate it.
 
