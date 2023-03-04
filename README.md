@@ -15,7 +15,7 @@ Because it could be fun to record data directly from the Game Boy Camera sensor 
 - a way to connect the device to the ribbon without destroying the original cable like an opened [replacement cable](https://www.digikey.com/en/products/base-product/jst-sales-america-inc/455/A09ZR09Z/588181) (choose B model).
 
 # How ?
-
+The device uses a MAX153 analog to digital converter. The idea comes from an [old paper](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Yerazunis%20(1999)%20An%20Inexpensive%2C%20All%20Solid-state%20Video%20and%20Data%20Recorder%20for%20Accident%20Reconstruction.pdf) claiming to use the [M64282FP artificial retina](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Mitsubishi%20Integrated%20Circuit%20M64282FP%20Image%20Sensor.pdf) as a road dashcam. This leads to [this project](https://github.com/Raphael-Boichot/Mitsubishi-M64282FP-dashcam) which uses the internal ADC of a Pi Pico but the idea here was to see if it was possible to directly intercept data during normal oprtaion of the Game Boy Camera, like the [GB Interceptor](https://github.com/Staacks/gbinterceptor).
 
 # Pinout
 [Pinout](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout.png)
