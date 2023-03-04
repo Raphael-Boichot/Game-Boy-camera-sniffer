@@ -22,6 +22,8 @@ OR
 # How ?
 The device uses a MAX153 analog to digital converter. The idea comes from an [old paper](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Yerazunis%20(1999)%20An%20Inexpensive%2C%20All%20Solid-state%20Video%20and%20Data%20Recorder%20for%20Accident%20Reconstruction.pdf) claiming to use the [M64282FP artificial retina](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Mitsubishi%20Integrated%20Circuit%20M64282FP%20Image%20Sensor.pdf) as a road dashcam. This leads to [this project](https://github.com/Raphael-Boichot/Mitsubishi-M64282FP-dashcam) which uses the internal ADC of a Pi Pico but the idea here was to see if it was possible to directly intercept data during normal operation of the Game Boy Camera, like the [GB Interceptor](https://github.com/Staacks/gbinterceptor). The MAX153 is used in its most simple way, **mode 0**, which allows a conversion in about 800 µs total, the cycle width of the Game Boy signal being 1.9 µs. The MAX153 has the advantage to have a very broad range of acceptable voltage. The scale here is set between 0 and 3.3 volts, like a real Game Boy Camera.
 
+The data format on SD card is the simpliest possible to favor writing speed. Each boot of the Game Boy will create a session file that contains for each image 32 bytes of information, then the raw 8 bits data for 128x120 pixels. The project comes with A Matlab Decoder but the file format is very easy to decode with any tool.
+
 # Pinout
 [Pinout](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout.png)
 
