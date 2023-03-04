@@ -19,6 +19,7 @@ OR
 - a [MAX153 Analog to Digital Converter](https://fr.aliexpress.com/item/1005005084589973.html) (yes it is expensive...)
 - a way to connect the device to the ribbon without destroying the original cable like an opened [replacement cable](https://www.digikey.com/en/products/base-product/jst-sales-america-inc/455/A09ZR09Z/588181) (choose B model).
 - a big decoupling electrolytic capacitor, typically [1000 µF - 10 volts](https://fr.aliexpress.com/item/1005002958594141.html).
+- in option, you can put a LED on GPIO11 to check access to the SD card (with a typical resistor of about 250-500 Ohms).
 
 The sniffer can be powered by the USB cable or the sensor ribbon through CAM_VCC, but in this case it requires a large decoupling capacitor to avoid image artifacts due to voltage shift with time. If powered by USB, **do not connect anything to the CAM_VCC**, just connect CAM_GND and protocol wires.
 
