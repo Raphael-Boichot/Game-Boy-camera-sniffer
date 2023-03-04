@@ -7,11 +7,11 @@ Because it could be fun to record data directly from the Game Boy Camera sensor 
 # What ?
 **Software:**
 - Install the last [Arduino IDE](https://www.arduino.cc/en/software)
-- Install the [Earle F. Philhower Raspberry Pi Pico Arduino core for Arduino IDE](https://github.com/earlephilhower/arduino-pico) via the Arduino Board manager (see [installation guide](https://github.com/earlephilhower/arduino-pico#installing-via-arduino-boards-manager)).
+- Install the [Earle F. Philhower Raspberry Pi Pico Arduino core for Arduino IDE](https://github.com/earlephilhower/arduino-pico) via the Arduino Board manager (see [installation guide](https://github.com/earlephilhower/arduino-pico#installing-via-arduino-boards-manager).
 
 **Hardware:**
 - an Arduino Pi Pico. [Fancy purple Chinese clones](https://fr.aliexpress.com/item/1005003928558306.html) are OK (this is still the genuine RP2040 chip) as long as you do not care that the pinout is completely baroque.
-- a [MAX153 Analog to Digital Converter]([https://fr.aliexpress.com/item/1005004536839797.html](https://fr.aliexpress.com/item/1005005084589973.html).
+- a [MAX153 Analog to Digital Converter](https://fr.aliexpress.com/item/1005005084589973.html).
 - a way to connect the device to the ribbon without destroying the original cable like an opened [replacement cable](https://www.digikey.com/en/products/base-product/jst-sales-america-inc/455/A09ZR09Z/588181) (choose B model).
 
 # How ?
