@@ -25,10 +25,10 @@ The device uses a MAX153 analog to digital converter. The idea comes from an [ol
 The data format on SD card is the simpliest possible to favor writing speed. Each boot of the Game Boy will create a session file that contains for each image 32 bytes of information, then the raw 8 bits data for 128x120 pixels. The project comes with A Matlab Decoder but the file format is very easy to decode with any tool.
 
 # Pinout
-[Pinout](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout.png)
+![Pinout](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout.png)
 
-# Output example
-[comparison](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/test.gif)
+# Comparison before/after the MAC-GBD
+![comparison](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/test.gif)
 
 # Known flaws
 - Powered by the sensor ribbon only, the device needs a big decoupling capacitor to avoid voltage shifting and image artifacts. Additionnaly, modded Game Boys with fancy screens and NiMH batteries would suffer from this additionnal current draw and may boot randomly. So reserve this mod for unmodded consoles, unless you choose to power the device by USB, in which case there is no issue at all.
