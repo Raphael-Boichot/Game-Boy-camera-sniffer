@@ -29,15 +29,17 @@ The device uses a MAX153 analog to digital converter (ADC). The idea comes from 
 The data format recorded on SD card is the simpliest possible to favor writing speed. Each boot of the Game Boy will create a new session file which contains for each image 32 bytes of header information, then the raw 8 bits data for 128x120 pixels. The project comes with a Matlab Decoder but the file format is very easy to decode with any tool. If you are interested by this project, I suppose that you are nerd enough to write your own decoder in Javascript, Python, GNU OCtave, etc. Data are returned in 128x120 pixels because 5-6 last lines are unusable (sensor id 128x128 natively).
 
 The two cores of the Pico are used but not in the most fancy manner. Core 1 does all the work while Core 0 deals with the internal interrupts only. I think writing to SD would be delegate to core 0 too in the future. Using only core 0 leads to stalling every ms, which leads to about 30 jitters in every image. Some part of the code should sounds strange but remind that the code is the fruit of many trials an errors to find the optimal timings. It is stable in its current form. Due to the very short timings, the Pico is overclocked at 250 MHz. Interrupts are too slow to be used efficiently so polling was mandatory. Apart from that, the code is short and simple, it can be summarized as:
-- initialise GPIOs, SD card and filename, put the RD pin of MAX153 high;
-- wait for a rising front on CAM_READ and enter the conversion loop
-- for 128x120 pixels, wait for 3 successive reading of CAM_CLOCK high (to avoid false positives);
-  - wait 3 cycles
-  - set the MAX153 RD pin low
-  - wait 40 cycles (approx 600-700 ns)
-  - get all GPIOs state and stuff value of GPIOs 0-7 as 8 bits char in an array
-  - set the MAX153 RD pin high (the MAX153 needs 200 ms to recover but the end of CAM_CLOCK cycle is long enough to avoid dealing with that delay)
+- Initialise GPIOs, SD card and filename, put the RD pin of MAX153 high (waiting state);
+- Wait for a rising front on CAM_READ and enter the conversion loop;
+- For 128x120 pixels, wait for 3 successive reading of CAM_CLOCK high (to avoid false positives);
+  - Wait 3 cycles;
+  - Set the MAX153 RD pin low (ask for voltage conversion);
+  - Wait 40 cycles (approx 600-700 ns);
+  - Get all GPIOs state at once and store value of GPIOs 0-7 as 8 bits char in an array;
+  - Set the MAX153 RD pin high;
 - Loop until next rising front on CAM_READ;
+
+The MAX153 needs 200 ms to recover after a voltage conversion but the CAM_CLOCK cycle is long enough to avoid dealing with that delay, so it is omitted in the code.
 
 The 8-bit images you will get are natively poorly contrasted, this is normal. It appears that the Game Boy camera uses a quite limited narrow voltage range, always in the upper range, and [compensate the lack of contrast with clever dithering matrices](https://github.com/HerrZatacke/dither-pattern-gen). The exact register strategy of the Game Boy Camera is still not fully understood at the moment and this tool may help elucidate it. You can of course enhance contrast during post-treatment of image data.
 
