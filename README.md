@@ -4,8 +4,6 @@ A data logger to intercept analog images from a Game Boy Camera. It consists of 
 # Why ?
 Because it could be fun to record data directly from the Game Boy Camera sensor before it even enters the MAC-GBD. In this case, the signal being analog, any bits per pixel definition can be recorded. The whole device proposed here is fully autonomous by drawing current on the 5V bus of the Game Boy. It works with GBA, GBC and DMG and returns 8 bits image data.
 
-The code comes as it. If you're not happy with the current implementation, build your own and debug it !
-
 # What ?
 **Software:**
 - Install the last [Arduino IDE](https://www.arduino.cc/en/software).
@@ -47,3 +45,6 @@ The 8-bit images you will get are natively poorly contrasted, this is normal. It
 - Powered by the sensor ribbon only, the device needs a big decoupling capacitor to avoid voltage shifting and image artifacts. Additionnaly, modded Game Boys with fancy screens and NiMH batteries would suffer from this additionnal current draw and may boot randomly. So reserve this mod for unmodded consoles, unless you choose to power the device by USB, in which case there is no issue at all.
 - The MAX153 ADC converts data at approximately 1.4 MSample/sec, but in the other hand the SD card can handle only 150 kB/s in writing mode. This means that I have to drop some frames sometimes to allow recording. The device can handle about 4 fps, not more. Using the second core to record may fix partially this, it has to be done in a future release.
 - The READ and CLOCK of the Game Boy Camera are directly connected to the 3.3V input if the Pi Pico and this is evil, I know. If this is too annoying for you, use a [serious bus transciever](https://www.ti.com/lit/ds/symlink/sn74lvc4245a.pdf). Small level shifters common on Aliexpress do not fit because they pull their pins in idle state high, this makes the Game Boy crash.
+
+# Kind warning
+The code comes as it. If you're not happy with the current implementation, build your own and debug it ! Tuning the timing parameters was extremely long and tedious and I won't debug any other variant of the current schematic.
