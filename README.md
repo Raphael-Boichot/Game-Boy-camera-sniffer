@@ -63,6 +63,6 @@ The 8-bit images you will get are natively poorly contrasted, this is normal. It
 - The READ and CLOCK of the Game Boy Camera are directly connected to the 3.3V input if the Pi Pico and this is evil, I know. If this is too annoying for you, use a [serious bus transciever](https://www.ti.com/lit/ds/symlink/sn74lvc4245a.pdf). Small level shifters common on Aliexpress do not fit because they pull their pins in idle state high, this makes the Game Boy crash.
 
 # Kind warning
-The code comes as it. If you're not happy with the current implementation and the Arduino IDE, build your own and debug it ! Tuning the timing parameters was extremely long and tedious and I won't debug any other variant of the current schematic or of the current code which is perfectly working.
+The code comes as it. If you're not happy with the current implementation and the Arduino IDE, build your own and debug it ! Tuning the timing parameters was extremely long and tedious and I won't debug any other variant of the current schematic, of the current code or with another IDE as it is perfectly working.
 
-Push request with improved working features are of course still welcomed.
+Push request with tested and working improvements are of course still welcomed.
