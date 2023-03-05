@@ -12,7 +12,7 @@ Because it could be fun to record data directly from the Game Boy Camera sensor 
 
 OR
 
-- Just drop the compile uf2 file to the board in mass storage media mode (Connect the Pico to USB port with the BOOTSEL button pushed and release).
+- Just drop the compiled uf2 file to the board in mass storage media mode (Connect the Pico to USB port with the BOOTSEL button pushed and release).
 
 **Hardware:**
 - an Arduino Pi Pico. [Fancy purple Chinese clones](https://fr.aliexpress.com/item/1005003928558306.html) are OK (this is still the genuine RP2040 chip) as long as you do not care that the pinout is completely baroque.
