@@ -32,11 +32,11 @@ The two cores of the Pico are used but not in the most fancy manner. Core 1 does
 - initialise GPIOs, SD card and filename, put the RD pin of MAX153 high;
 - wait for a rising front on CAM_READ and enter the conversion loop
 - for 128x120 pixels, wait for 3 successive reading of CAM_CLOCK high (to avoid false positives);
--     wait 3 cycles
--     set the MAX153 RD pin low
--     wait 40 cycles (approx 600-700 ns)
--     get all GPIOs state and stuff value of GPIOs 0-7 as 8 bits char in an array
--     set the MAX153 RD pin high (the MAX153 needs 200 ms to recover but the end of CAM_CLOCK cycle is long enough to avoid dealing with that delay)
+-- wait 3 cycles
+-- set the MAX153 RD pin low
+-- wait 40 cycles (approx 600-700 ns)
+-- get all GPIOs state and stuff value of GPIOs 0-7 as 8 bits char in an array
+-- set the MAX153 RD pin high (the MAX153 needs 200 ms to recover but the end of CAM_CLOCK cycle is long enough to avoid dealing with that delay)
 - Loop until next rising front on CAM_READ;
 
 The 8-bit images you will get are natively poorly contrasted, this is normal. It appears that the Game Boy camera uses a quite limited narrow voltage range, always in the upper range, and [compensate the lack of contrast with clever dithering matrices](https://github.com/HerrZatacke/dither-pattern-gen). The exact register strategy of the Game Boy Camera is still not fully understood at the moment and this tool may help elucidate it. You can of course enhance contrast during post-treatment of image data.
