@@ -38,7 +38,7 @@ The two cores of the Pico are used but not in the most fancy manner. Core 1 does
   - Get all GPIOs state at once and store value of GPIOs 0-7 as 8 bits char in an array;
   - Set the MAX153 RD pin high;
 - Dump the pixel array to the serial or to the SD card;
-- (Miss some frames as writing to SD or sending to serail is slow);
+- (Miss some frames as writing to SD or sending to serial is slow);
 - Loop until next rising front on CAM_READ;
 
 The MAX153 needs 200 ms to recover after a voltage conversion but the CAM_CLOCK cycle is long enough to avoid dealing with that delay, so it is omitted in the code.
@@ -51,7 +51,7 @@ The 8-bit images you will get are natively poorly contrasted, this is normal. It
 # Detail of the sensor ribbon
 ![ribbon](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout2.png)
 
-# How I've made it (yes this is disgusting)
+# How I've made it (yes this is disgusting !)
 ![mounting](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/device.png)
 
 # Comparison sniffed image/what you get with a Game Boy Camera
