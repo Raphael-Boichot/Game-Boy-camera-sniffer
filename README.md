@@ -37,6 +37,8 @@ The two cores of the Pico are used but not in the most fancy manner. Core 1 does
   - Wait 40 cycles (approx 600-700 ns);
   - Get all GPIOs state at once and store value of GPIOs 0-7 as 8 bits char in an array;
   - Set the MAX153 RD pin high;
+- Dump the pixel array to the serial or to the SD card;
+- (Miss some frames as writing to SD or sending to serailm is slow);
 - Loop until next rising front on CAM_READ;
 
 The MAX153 needs 200 ms to recover after a voltage conversion but the CAM_CLOCK cycle is long enough to avoid dealing with that delay, so it is omitted in the code.
