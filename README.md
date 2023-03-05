@@ -4,6 +4,8 @@ A data logger to intercept analog images from a Game Boy Camera. It consists of 
 # Why ?
 Because it could be fun to record data directly from the Game Boy Camera sensor before it even enters the MAC-GBD. In this case, the signal being analog, any bits per pixel definition can be recorded. The whole device proposed here is fully autonomous by drawing current on the 5V bus of the Game Boy. It works with GBA, GBC and DMG and returns 8 bits image data.
 
+The code comes as it. If you're not happy with the current implementation, build your own and debug it !
+
 # What ?
 **Software:**
 - Install the last [Arduino IDE](https://www.arduino.cc/en/software).
