@@ -36,9 +36,9 @@ char pixel;
 int counter, t_in, t_out;
 unsigned char CamData[128 * 128];// raw sensor data in 8 bits per pixel
 unsigned long Next_ID;
-bool record_enable = 0;
 char storage_file_name[20];
-
+bool record_enable = 0;
+bool output_enable = 0;
 void setup()
 { //MAX153 outputs bits, DX=GPIOX fo simplicity
   gpio_init(0);       gpio_set_dir(0, GPIO_IN);//MAX153 D0
@@ -55,7 +55,7 @@ void setup()
   gpio_init(READ_CAMERA);      gpio_set_dir(READ_CAMERA, GPIO_IN); gpio_pull_down(READ_CAMERA);//CAM_READ, signal to trigger reading from camera
   gpio_init(CLOCK);      gpio_set_dir(CLOCK, GPIO_IN); gpio_pull_down(CLOCK);//CAM_CLOCK signal to trigger reading a pixel from camera
   gpio_init(READ_MAX153);      gpio_set_dir(READ_MAX153, GPIO_OUT); gpio_put(READ_MAX153, 1);///MAX153 RD, signal to trigger reading to the MAX153 in mode 0
-
+  set_sys_clock_khz(250000, true);//mandatory to complete all the tasks within 2 microseconds
 #ifdef USE_SERIAL
   Serial.begin(2000000);//in case of debugging
 #endif
@@ -70,21 +70,34 @@ void setup()
 #endif
 
 }
-void loop()
+void loop()//core 0 records the images
 {
-  //nothing here, core 0 deals with all internal pico interrupts like timers
-  //it can probably deal with SD protocol too, maybe in a future release
+
+  if (output_enable == 1) {
+    gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
+#ifdef  USE_SD
+    gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
+    record_image();//raw format, just 8 bits pixel value in a 128*120 row
+    gpio_put(LED_WRITE, 0);//triggers the LED off
+#endif
+
+#ifdef USE_SERIAL
+    dump_data_to_serial();//dump raw data to serial in ASCII for debugging - you can use the Matlab code ArduiCam_Matlab.m into the repo to probe the serial and plot images
+#endif
+    gpio_put(LED_WRITE, 0);//triggers the LED off
+    output_enable = 0;
+  }
 }
 
 
 void setup1()
 {
-  set_sys_clock_khz(250000, true);//mandatory to complete all the tasks within 2 microseconds
+// Nothing here
 }
 
-void loop1()
+void loop1()//core 1 polls the camera
 {
-  if ((gpio_get(READ_CAMERA) == 1) & (record_enable == 1)) //READ signal from camera goes high on a rising front
+  if ((gpio_get(READ_CAMERA) == 1)) //READ signal from camera goes high on a rising front
   {
     gpio_put(LED, 1);//triggers the internal LED on
     counter = 0;//resets the rank in pixel array
@@ -103,23 +116,12 @@ void loop1()
         CamData[counter] = gpio_get_all() & 0b00000000000000000000000011111111; //get all the GPIOs state at once. The mask is not necessary as packing an int into a char does the same job...
         gpio_put(READ_MAX153, 1);//MAX153 returns in idle mode
         counter++;
-      }//The loop enters an idle state until the next rising clock front. It's enough to allow the MAX153 to recover
+      }//The loop enters theoretically an idle state until the next rising clock front. It's enough to allow the MAX153 to recover
     }
+    while(gpio_get(READ_CAMERA) == 1);//wait until READ_CAMERA camera to go low again
     gpio_put(LED, 0);//triggers the internal LED off
-
-
-#ifdef  USE_SD
-    gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
-    record_image();//raw format, just 8 bits pixel value in a 128*120 row
-    gpio_put(LED_WRITE, 0);//triggers the LED off
-#endif
-
-#ifdef USE_SERIAL
-    dump_data_to_serial();//dump raw data to serial in ASCII for debugging - you can use the Matlab code ArduiCam_Matlab.m into the repo to probe the serial and plot images
-#endif
-
+    output_enable = 1;
   }
-  record_enable = !gpio_get(READ_CAMERA);//to avoid recording during an image transmission and get an incomplete image
 }
 
 void ID_file_creator(const char * path) {
