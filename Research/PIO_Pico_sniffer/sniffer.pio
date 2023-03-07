@@ -1,0 +1,70 @@
+// compile with https://wokwi.com/tools/pioasm
+; Program name
+.program sniffer
+
+    pull block                  ; Pull from FIFO to OSR (only once)
+    mov y, osr                  ; Copy value from OSR to y scratch register
+    set pindirs, 0              ; set pins as input pins
+
+.wrap_target
+    mov x, y                    ; Initialize counter variable
+
+    wait 0 pin 0
+    wait 1 pin 0
+
+pixelout:
+        wait 0 pin 1
+        wait 1 pin 1
+
+        mov osr, null
+        out pins, 1             ; output 0 to OUT pin (ADC ready)
+
+        nop [31]
+        nop [31]
+        nop [10]                ; wait 600 ns (75 8ns periods total)
+
+        in isr, 8               ; read ADC value
+        push block              ; push color value
+
+        mov osr, !null
+        out pins, 1             ; output 1 to OUT pin (ADC ready)
+
+        jmp x-- pixelout        ; loop through all the pixels
+
+    irq 0                       ; raise IRQ0
+.wrap
+
+
+% c-sdk {
+static inline void sniffer_program_init(PIO pio, uint sm, uint offset, uint ctrl, uint ready, uint data) {
+
+    // creates state machine configuration object c, sets
+    // to default configurations. I believe this function is auto-generated
+    // and gets a name of <program name>_program_get_default_config
+    // Yes, page 40 of SDK guide
+    pio_sm_config c = sniffer_program_get_default_config(offset);
+
+    // Map the state machine's GET and IN pin group to 8 pins, the `data`
+    // parameter to this function is the lowest one. These groups overlap.
+    sm_config_set_set_pins(&c, ctrl, 2);
+    sm_config_set_out_pins(&c, ready, 1);
+    sm_config_set_in_pins(&c, data);
+
+    // Set clock division (Commented out, this one runs at full speed)
+    // sm_config_set_clkdiv(&c, 5);
+
+    // Set this pin's GPIO function (connect PIO to the pad)
+    for (uint8_t i = 0; i != 2; i++) pio_gpio_init(pio, ctrl + i);
+    pio_gpio_init(pio, ready);
+    for (uint8_t i = 0; i != 8; i++) pio_gpio_init(pio, data + i);
+
+    // Set the pin direction to input at the PIO (8 pins)
+    pio_sm_set_consecutive_pindirs(pio, sm, ctrl, 2, false);
+
+    // Load our configuration, and jump to the start of the program
+    pio_sm_init(pio, sm, offset, &c);
+
+    // Set the state machine running (commented out, I'll start this in the C)
+    // pio_sm_set_enabled(pio, sm, true);
+}
+%}
