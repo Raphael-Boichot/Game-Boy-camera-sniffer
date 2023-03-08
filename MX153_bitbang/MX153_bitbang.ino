@@ -2,6 +2,7 @@
 //This code allows sniffing and recording analog data on a Game Boy Camera ribbon cable without changing the camera behavior
 //it creates a raw datafile easy to decode each time the camera is booted.
 //Reading an image takes 30 ms so hardware interrupts creates jitters every 4-5 lines if using core 0.
+//So core 0 deals with the internal interrupts and SD/serial, core 1 with bitbanging the MAX153 on time
 //5The code so runs on core 1, core 0 dealing with interrupts
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
@@ -72,9 +73,7 @@ void setup()
 }
 void loop()//core 0 records the images
 {
-
   if (output_enable == 1) {
-    gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
 #ifdef  USE_SD
     gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
     record_image();//raw format, just 8 bits pixel value in a 128*120 row
@@ -82,9 +81,10 @@ void loop()//core 0 records the images
 #endif
 
 #ifdef USE_SERIAL
+    gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
     dump_data_to_serial();//dump raw data to serial in ASCII for debugging - you can use the Matlab code ArduiCam_Matlab.m into the repo to probe the serial and plot images
-#endif
     gpio_put(LED_WRITE, 0);//triggers the LED off
+#endif
     output_enable = 0;
   }
 }
@@ -92,7 +92,7 @@ void loop()//core 0 records the images
 
 void setup1()
 {
-// Nothing here
+  // Nothing here
 }
 
 void loop1()//core 1 polls the camera
@@ -118,7 +118,7 @@ void loop1()//core 1 polls the camera
         counter++;
       }//The loop enters theoretically an idle state until the next rising clock front. It's enough to allow the MAX153 to recover
     }
-    while(gpio_get(READ_CAMERA) == 1);//wait until READ_CAMERA camera to go low again
+    while (gpio_get(READ_CAMERA) == 1); //wait until READ_CAMERA camera to go low again
     gpio_put(LED, 0);//triggers the internal LED off
     output_enable = 1;
   }
