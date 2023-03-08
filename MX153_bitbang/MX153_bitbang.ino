@@ -36,10 +36,12 @@ char LED =   25;//internal LED high when READ_CAMERA is high
 char pixel;
 int counter, t_in, t_out;
 unsigned char CamData[128 * 128];// raw sensor data in 8 bits per pixel
+unsigned char OutputData[128 * 128];// raw sensor data in 8 bits per pixel
 unsigned long Next_ID;
 char storage_file_name[20];
 bool record_enable = 0;
 bool output_enable = 0;
+bool write_to_SD = 0;
 void setup()
 { //MAX153 outputs bits, DX=GPIOX fo simplicity
   gpio_init(0);       gpio_set_dir(0, GPIO_IN);//MAX153 D0
@@ -74,18 +76,18 @@ void setup()
 void loop()//core 0 records the images
 {
   if (output_enable == 1) {
-#ifdef  USE_SD
+    write_to_SD = 1;
+    output_enable = 0;
     gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
+#ifdef  USE_SD
     record_image();//raw format, just 8 bits pixel value in a 128*120 row
-    gpio_put(LED_WRITE, 0);//triggers the LED off
 #endif
 
 #ifdef USE_SERIAL
-    gpio_put(LED_WRITE, 1);//triggers the additionnal LED on
     dump_data_to_serial();//dump raw data to serial in ASCII for debugging - you can use the Matlab code ArduiCam_Matlab.m into the repo to probe the serial and plot images
-    gpio_put(LED_WRITE, 0);//triggers the LED off
 #endif
-    output_enable = 0;
+    gpio_put(LED_WRITE, 0);//triggers the LED off
+    write_to_SD = 0;
   }
 }
 
@@ -103,23 +105,21 @@ void loop1()//core 1 polls the camera
     counter = 0;//resets the rank in pixel array
     while (counter < (128 * 120))//last 8 lines are junk, no need to record them
     {
-      if ((gpio_get(CLOCK) == 1) & (gpio_get(CLOCK) == 1) & (gpio_get(CLOCK) == 1)) //CLOCK signal from camera goes high, 3 consecutive readings
-        //if (true) 3 times, CLOCK signal from camera goes high (to false positives due to noise)
       {
-        NOP;//Let a bit of time for VOUT stabilisation before reading
-        NOP;
-        NOP;
-        gpio_put(READ_MAX153, 0);//triggers a measurement on the MAX153
-        {
-          for (int i = 0; i < 40; i++) NOP;//37 minimal waiting time for data to be ready with the MAX153, about 6-700 ns, but depends on temperature so a margin is taken
-        }
-        CamData[counter] = gpio_get_all() & 0b00000000000000000000000011111111; //get all the GPIOs state at once. The mask is not necessary as packing an int into a char does the same job...
-        gpio_put(READ_MAX153, 1);//MAX153 returns in idle mode
-        counter++;
-      }//The loop enters theoretically an idle state until the next rising clock front. It's enough to allow the MAX153 to recover
+        for (int i = 0; i < 10; i++) NOP;//wait a bit to let the VOUT stabilize
+      }
+      gpio_put(READ_MAX153, 0);//triggers a measurement on the MAX153
+      {
+        for (int i = 0; i < 37; i++) NOP;//37 minimal waiting time for data to be ready with the MAX153, about 6-700 ns, but depends on temperature so a margin is taken
+      }
+      CamData[counter] = gpio_get_all() & 0b00000000000000000000000011111111; //get all the GPIOs state at once. The mask is not necessary as packing an int into a char does the same job...
+      gpio_put(READ_MAX153, 1);//MAX153 returns in idle mode
+      counter++;
+      while (gpio_get(CLOCK) == 0);//wait until CLOCK camera goes high again
     }
-    while (gpio_get(READ_CAMERA) == 1); //wait until READ_CAMERA camera to go low again
+    while (gpio_get(READ_CAMERA) == 1); //wait until READ_CAMERA camera goes low again
     gpio_put(LED, 0);//triggers the internal LED off
+    if (write_to_SD == 0) memcpy(OutputData, CamData, sizeof(CamData));
     output_enable = 1;
   }
 }
@@ -165,8 +165,7 @@ void dump_data_to_serial() {
   Serial.println("Data transmitted");
   delay(250);
   for (int i = 0; i < 128 * 120; i++) {
-    pixel = CamData[i];//to get data with autocontrast
-    //pixel = CamData[i]; //to get data without autocontrast
+    pixel = OutputData[i];
     if (pixel <= 0x0F) Serial.print('0');
     Serial.print(pixel, HEX);
     Serial.print(" ");
@@ -180,8 +179,8 @@ void record_image() {
   // if the file is writable, write to it:
   if (dataFile) {
     dataFile.write("RAW_8BIT_128x120");//Just a marker with keywords
-    dataFile.write("JUNKJUNKJUNKJUNK");//Just a marker to keep compatibility with https://github.com/Raphael-Boichot/Mitsubishi-M64282FP-dashcam
-    dataFile.write(CamData, 128 * 120);
+    dataFile.write("ANALOG_RECORDER_");//Just a marker to keep compatibility with https://github.com/Raphael-Boichot/Mitsubishi-M64282FP-dashcam
+    dataFile.write(OutputData, 128 * 120);
     dataFile.close();
   }
 #endif
