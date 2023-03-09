@@ -39,10 +39,11 @@ The two cores of the Pico are used. Core 1 speaks with the sensor while Core 0 d
   - Set the MAX153 RD pin high;
   - Wait while the CAM_CLOCK is low;
 - Dump the pixel array to a memory buffer and rise a flag;
-- Write to SD and reset the flag;
+- Write the buffer to SD and reset the flag;
 - Loop until next rising front on CAM_READ;
 
 The MAX153 needs 200 ms to recover after a voltage conversion but the CAM_CLOCK cycle is long enough to avoid dealing with that delay, so it is omitted in the code.
+Timing between cores 0 and 1 allows recording at several FPS.
 
 The 8-bit images you will get are natively poorly contrasted, this is normal. It appears that the Game Boy camera uses a quite limited narrow voltage range, always in the upper range, and [compensate the lack of contrast with clever dithering matrices](https://github.com/HerrZatacke/dither-pattern-gen). The exact register strategy of the Game Boy Camera is still not fully understood at the moment and this tool may help elucidate it. You can of course enhance contrast during post-treatment of image data.
 
