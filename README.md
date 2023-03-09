@@ -28,17 +28,18 @@ The device uses a MAX153 analog to digital converter (ADC). The idea comes from 
 
 The data format recorded on SD card is the simpliest possible to favor writing speed. Each boot of the Game Boy will create a new session file which contains for each image 32 bytes of header information, then the raw 8 bits data for 128x120 pixels. The project comes with a Matlab Decoder but the file format is very easy to decode with any tool. If you are interested by this project, I suppose that you are nerd enough to write your own decoder in Javascript, Python, GNU OCtave, etc. Data are returned in 128x120 pixels because 5-6 last lines are unusable (sensor id 128x128 natively).
 
-The two cores of the Pico are used but not in the most fancy manner. Core 1 does all the work while Core 0 deals with the internal interrupts only. I think writing to SD would be delegate to core 0 too in the future. Using only core 0 leads to stalling every ms, which leads to about 30 jitters in every image. Some part of the code should sounds strange but remind that the code is the fruit of many trials an errors to find the optimal timings. It is stable in its current form. Due to the very short timings, the Pico is overclocked at 250 MHz. Interrupts are too slow to be used efficiently so polling was mandatory. Apart from that, the code is short and simple, it can be summarized as:
+The two cores of the Pico are used. Core 1 speaks with the sensor while Core 0 deals with the internal interrupts and the SD card. Using core 0 for dealing with the sensor is impossible as it leads to stalling every ms due to timer interrupts. Some part of the code should sounds strange but remind that the code is the fruit of many trials an errors to find the optimal timings. It is stable in its current form. Due to the very short timings, the Pico is overclocked at 250 MHz. Interrupts are too slow (and not always triggered due to the fact that the signal is rather unstable) to be used efficiently so polling was mandatory. Apart from that, the code is short and simple, it can be summarized as:
 - Initialise GPIOs, SD card and filename, put the RD pin of MAX153 high (waiting state);
 - Wait for a rising front on CAM_READ and enter the conversion loop;
 - For 128x120 pixels, wait for 3 successive reading of CAM_CLOCK high (to avoid false positives);
-  - Wait 3 cycles;
+  - Wait 10 cycles;
   - Set the MAX153 RD pin low (ask for voltage conversion);
-  - Wait 40 cycles (approx 600-700 ns);
+  - Wait 37 cycles (approx 600-700 ns);
   - Get all GPIOs state at once and store value of GPIOs 0-7 as 8 bits char in an array;
   - Set the MAX153 RD pin high;
-- Dump the pixel array to the serial or to the SD card;
-- (Miss some frames as writing to SD or sending to serial is slow);
+  - Wait while the CAM_CLOCK is low;
+- Dump the pixel array to a memory buffer and rise a flag;
+- Write to SD and reset the flag;
 - Loop until next rising front on CAM_READ;
 
 The MAX153 needs 200 ms to recover after a voltage conversion but the CAM_CLOCK cycle is long enough to avoid dealing with that delay, so it is omitted in the code.
