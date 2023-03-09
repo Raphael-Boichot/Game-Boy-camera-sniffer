@@ -31,7 +31,7 @@ The data format recorded on SD card is the simpliest possible to favor writing s
 The two cores of the Pico are used. Core 1 speaks with the sensor while Core 0 deals with the internal interrupts and the SD card. Using core 0 for dealing with the sensor is impossible as it leads to stalling every ms due to timer interrupts. Some part of the code should sounds strange but remind that the code is the fruit of many trials an errors to find the optimal timings. It is stable in its current form. Due to the very short timings, the Pico is overclocked at 250 MHz. Interrupts are too slow (and not always triggered due to the fact that the signal is rather unstable) to be used efficiently so polling was mandatory. Apart from that, the code is short and simple, it can be summarized as:
 - Initialise GPIOs, SD card and filename, put the RD pin of MAX153 high (waiting state);
 - Wait for a rising front on CAM_READ and enter the conversion loop;
-- For 128x120 pixels, wait for 3 successive reading of CAM_CLOCK high (to avoid false positives);
+- For 128x120 pixels, do:
   - Wait 10 cycles;
   - Set the MAX153 RD pin low (ask for voltage conversion);
   - Wait 37 cycles (approx 600-700 ns);
