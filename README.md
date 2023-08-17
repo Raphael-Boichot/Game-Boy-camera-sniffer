@@ -42,7 +42,7 @@ The two cores of the Pico are used. Core 1 speaks with the sensor while Core 0 d
 - Write the buffer to SD and reset the flag;
 - Loop until next rising front on CAM_READ;
 
-The MAX153 needs 200 ms to recover after a voltage conversion but the CAM_CLOCK cycle is long enough to avoid dealing with that delay, so it is omitted in the code.
+The MAX153 needs 200 ns to recover after a voltage conversion but the CAM_CLOCK cycle is long enough to avoid dealing with that delay, so it is omitted in the code.
 Timing between cores 0 and 1 allows recording at several FPS.
 
 The 8-bit images you will get are natively poorly contrasted, this is normal. It appears that the Game Boy camera uses a quite limited narrow voltage range, always in the upper range, and [compensate the lack of contrast with clever dithering matrices](https://github.com/HerrZatacke/dither-pattern-gen). The exact register strategy of the Game Boy Camera is still not fully understood at the moment and this tool may help elucidate it. You can of course enhance contrast during post-treatment of image data.
@@ -62,7 +62,7 @@ The 8-bit images you will get are natively poorly contrasted, this is normal. It
 # Known flaws
 - Powered by the sensor ribbon only, the device needs a big decoupling capacitor to avoid voltage shifting and image artifacts. Additionnaly, modded Game Boys with fancy screens and NiMH batteries would suffer from this additionnal current draw and may boot randomly. So reserve this mod for unmodded consoles, unless you choose to power the device by USB, in which case there is no issue at all.
 - The MAX153 ADC converts data at approximately 1.4 MSample/sec, but in the other hand the SD card can handle only 150 kB/s in writing mode. This means that I have to drop some frames sometimes to allow recording. The device can handle about 4 fps, not more. Using the second core to record may fix partially this, it has to be done in a future release.
-- The READ and CLOCK of the Game Boy Camera are directly connected to the 3.3V input if the Pi Pico and this is evil, I know. If this is too annoying for you, use a [serious bus transciever](https://www.ti.com/lit/ds/symlink/sn74lvc4245a.pdf). Small level shifters common on Aliexpress do not fit because they pull their pins in idle state high, this makes the Game Boy crash.
+- The 5V signals from READ and CLOCK of the Game Boy Camera are directly connected to the 3.3V input of the Pi Pico and this is evil, I know. If this is too annoying for you, use a [serious bus transciever](https://www.ti.com/lit/ds/symlink/sn74lvc4245a.pdf). Small level shifters common on Aliexpress do not fit because they pull their pins in idle state high, which makes the Game Boy crash.
 
 # Kind warning
 The code comes as it. If you're not happy with the current implementation and the Arduino IDE, build your own and debug it ! Tuning the timing parameters was extremely long and tedious and I won't debug any other variant of the current schematic, of the current code or with another IDE as it is perfectly working.
