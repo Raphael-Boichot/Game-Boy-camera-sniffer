@@ -15,12 +15,14 @@ OR
 - Just drop the compiled uf2 file to the board in mass storage media mode (Connect the Pico to USB port with the BOOTSEL button pushed and release).
 
 **Hardware:**
-- an Arduino Pi Pico. [Fancy purple Chinese clones](https://fr.aliexpress.com/item/1005003928558306.html) are OK (this is still the genuine RP2040 chip) as long as you do not care that the pinout is completely baroque compared to a regular Pico board. If you plan to use the [proposed PCB](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/PCB/PCB.png), buy a **regular Pico with castellated holes**.
+- [PCB](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/tree/main/PCB) ordered at [JLCPCB](https://jlcpcb.com/). Just drop the Gerber .zip files on their site and order with default options.
+- An [Arduino Pi Pico](https://fr.aliexpress.com/item/1005003928558306.html). **Be sure to select the regular/original green board with the official pinout and castellated holes ("Color: Pico Original").**
 - a [MAX153 Analog to Digital Converter](https://fr.aliexpress.com/item/1005005084589973.html) (yes it is expensive but old new stock...)
-- a way to connect the device to the board without destroying the original cables like [replacement cables](https://fr.aliexpress.com/item/1005004501408268.html) (choose 9 pins, double head, JST ZH1.5MM).
-- Some [9 pins JST ZH1.5MM connectors.](https://fr.aliexpress.com/item/32920487056.html)
+- Some [9 pins JST ZH1.5MM connector](https://fr.aliexpress.com/item/32920487056.html). If it comes with straight pins, you can bend them easily.
+- Some [9 pins, double head, 10 cm, JST ZH1.5MM cables](https://fr.aliexpress.com/item/1005004501408268.html).
 - a big decoupling electrolytic capacitor, typically [1000 µF - 10 volts](https://fr.aliexpress.com/item/1005002958594141.html).
-- in option, you can put a LED on GPIO11 to check access to the SD card (with a typical resistor of about 250-500 Ohms in series).
+- 1 [microswitches SS-12D00G](https://fr.aliexpress.com/item/1005003938856402.html) to shift between USB and Game Boy power.
+- 1 [regular 5 mm LEDs](https://fr.aliexpress.com/item/32848810276.html) and 1 [through hole resistors](https://fr.aliexpress.com/item/32866216363.html) of 250 to 1000 Ohms (low value = high brighness).
 
 # How ?
 The device uses a MAX153 analog to digital converter (ADC). The idea comes from an [old paper](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Yerazunis%20(1999)%20An%20Inexpensive%2C%20All%20Solid-state%20Video%20and%20Data%20Recorder%20for%20Accident%20Reconstruction.pdf) proposing to use the [M64282FP artificial retina coupled with a MAX153 flash ADC](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Mitsubishi%20Integrated%20Circuit%20M64282FP%20Image%20Sensor.pdf) as a 5 fps road dashcam system. This leads to [this project](https://github.com/Raphael-Boichot/Mitsubishi-M64282FP-dashcam) which uses the internal ADC of a Pi Pico but the idea of the present sniffer was to directly intercept data during normal operation of the Game Boy Camera, like the [GB Interceptor](https://github.com/Staacks/gbinterceptor). It requires a real external flash ADC, the SAR method (Successive Aproximation Register) used in the Pi Pico being much too slow. The MAX153 is used in its most simple way, **mode 0**, which allows a voltage conversion in about 800 ns in total, the cycle width of the Game Boy clock signal being 1900 ns. The MAX153 has the advantage to have a very broad range of readable acceptable voltage. The scale here is set between 0 and 3.3 volts, close or similar to a real Game Boy Camera. The MAX153 have multiple driving modes so the sniffer may probably be improved to go faster.
