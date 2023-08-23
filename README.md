@@ -54,7 +54,7 @@ The 8-bit images you will get are natively poorly contrasted, this is normal. It
 # Detail of the sensor ribbon
 ![ribbon](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout2.png)
 
-# How I've made it (yes this is disgusting !)
+# How I've made it (yes this is a disgusting prototype !)
 ![mounting](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/device.png)
 
 # Comparison sniffed image/what you get with a Game Boy Camera
