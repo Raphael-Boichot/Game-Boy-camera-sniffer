@@ -24,6 +24,7 @@ for i=1:1:length(listing)
         pixel_data=(pixel_data-minimum)*(255/(maximum-minimum));
         pixels=uint8(rot90(reshape(pixel_data,width,height),3));
         pixels=fliplr(pixels);
+        pixels=(pixels-128)*2;
         imshow(pixels);
         drawnow
         scaled=imresize(pixels,upscaling_factor,'nearest');
