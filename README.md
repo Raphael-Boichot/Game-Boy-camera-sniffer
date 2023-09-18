@@ -21,7 +21,7 @@ OR
 - Some [9 pins JST ZH1.5MM connector](https://fr.aliexpress.com/item/32920487056.html). If it comes with straight pins, you can bend them easily.
 - Some [9 pins, double head, 10 cm, JST ZH1.5MM cables](https://fr.aliexpress.com/item/1005004501408268.html).
 - a big decoupling electrolytic capacitor, typically [1000 µF - 10 volts](https://fr.aliexpress.com/item/1005002958594141.html).
-- 1 [microswitches SS-12D00G](https://fr.aliexpress.com/item/1005003938856402.html) to shift between USB and Game Boy power.
+- 1 [microswitches SS-12D00G](https://fr.aliexpress.com/item/1005003938856402.html) to shift between USB and Game Boy power (do not solder at all to keep powering by USB only).
 - 1 [regular 5 mm LEDs](https://fr.aliexpress.com/item/32848810276.html) and 1 [through hole resistors](https://fr.aliexpress.com/item/32866216363.html) of 250 to 1000 Ohms (low value = high brighness).
 
 # How ?
