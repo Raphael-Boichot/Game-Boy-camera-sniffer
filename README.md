@@ -15,7 +15,7 @@ OR
 - Just drop the compiled uf2 file to the board in mass storage media mode (Connect the Pico to USB port with the BOOTSEL button pushed and release).
 
 **Hardware:**
-- [PCB](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/tree/main/PCB) ordered at [JLCPCB](https://jlcpcb.com/). Just drop the Gerber .zip files on their site and order with default options.
+- [PCB](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/tree/main/PCB) ordered at [JLCPCB](https://jlcpcb.com/). Just drop the Gerber .zip files on their site and order with default options. Use at your own risk.
 - An [Arduino Pi Pico](https://fr.aliexpress.com/item/1005003928558306.html). **Be sure to select the regular/original green board with the official pinout and castellated holes ("Color: Pico Original").**
 - a [MAX153 Analog to Digital Converter](https://fr.aliexpress.com/item/1005005084589973.html) (yes it is expensive but old new stock...)
 - Some [9 pins JST ZH1.5MM connector](https://fr.aliexpress.com/item/32920487056.html). If it comes with straight pins, you can bend them easily.
