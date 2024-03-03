@@ -1,3 +1,5 @@
+Note: this archive is no longer maintained since January 2024. Enjoy it as it is !
+
 # The Game Boy camera analog interceptor
 A data logger to intercept analog images from a Game Boy Camera. It consists of a middle man circuit in direct derivation of the camera sensor ribbon that drops anything that it sees as 8-bits data images to an SD card. It does not interfere at all with normal Game Boy Camera operation.
 
