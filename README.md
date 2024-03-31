@@ -18,7 +18,7 @@ OR
 - [PCB](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/tree/main/PCB) ordered at [JLCPCB](https://jlcpcb.com/). Just drop the Gerber .zip files on their site and order with default options. Use at your own risk.
 - An [Arduino Pi Pico](https://fr.aliexpress.com/item/1005003928558306.html). **Be sure to select the regular/original green board with the official pinout and castellated holes ("Color: Pico Original").**
 - a [MAX153 Analog to Digital Converter](https://fr.aliexpress.com/item/1005005084589973.html) (yes it is expensive but old new stock...)
-- Some [9 pins JST ZH1.5MM connector](https://fr.aliexpress.com/item/32920487056.html). If it comes with straight pins, you can bend them easily.
+- Some [9 pins JST ZH1.5MM connector **Vertical SMD**](https://fr.aliexpress.com/item/32920487056.html). Horizontal SMD does nor fit.
 - Some [9 pins, double head, 10 cm, JST ZH1.5MM cables](https://fr.aliexpress.com/item/1005004501408268.html).
 - a big decoupling electrolytic capacitor, typically [1000 µF - 10 volts](https://fr.aliexpress.com/item/1005002958594141.html).
 - 1 [microswitches SS-12D00G](https://fr.aliexpress.com/item/1005003938856402.html) to shift between USB and Game Boy power (do not solder at all to keep powering by USB only).
