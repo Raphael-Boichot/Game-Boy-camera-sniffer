@@ -63,6 +63,8 @@ The 8-bit images you will get are natively poorly contrasted, this is normal. It
 ## Boot sequence and live raw image
 ![comparison](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Camera_boot.gif)
 
+This animation shows the boot sequence of the Game Boy Camera when sensor is checked for integrity. It then displays some raw images seen by the sensor when camera is activated. Note that the image has poor contrast as the sensor only uses half of the voltage scale allowed by the MAC-GBD mapper (the lower scale been used as "voltage buffer"). This is corrected in camera by dithering matrices.
+
 ## Known flaws
 - Powered by the sensor ribbon only, the device needs a big decoupling capacitor to avoid voltage shifting and image artifacts. SD recording consumes indeed a ton of current. Additionnaly, modded Game Boys with fancy screens and NiMH batteries would suffer from this additionnal current draw and may boot randomly. So reserve this mod for unmodded consoles, unless you choose to power the device by USB or with a powerbank, in which case there is no issue at all.
 - The MAX153 ADC converts data at approximately 1.4 MSample/sec, but in the other hand the SD card can handle only 150 kB/s in writing mode. This means that I have to drop some frames sometimes to allow recording. The device can handle about 4 fps in 8-bits depth, not more, and only due to SD limitation on Pi Pico.
