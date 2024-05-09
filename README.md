@@ -49,19 +49,22 @@ Timing between cores 0 and 1 allows recording at several FPS.
 The 8-bit images you will get are natively poorly contrasted, this is normal. It appears that the Game Boy camera uses a quite limited narrow voltage range, always in the upper range, and [compensate the lack of contrast with clever dithering matrices](https://github.com/HerrZatacke/dither-pattern-gen). The exact register strategy of the Game Boy Camera is still not fully understood at the moment and this tool may help elucidate it. You can of course enhance contrast during post-treatment of image data.
 
 ## Pinout
-![Pinout](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout.png)
+![Pinout](/Bibliography/pinout.png)
 
 ## Detail of the sensor ribbon
-![ribbon](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/pinout2.png)
+![ribbon](/Bibliography/pinout2.png)
 
 ## How I've made it (yes this is a disgusting prototype !)
-![mounting](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/device.png)
+![mounting](/Bibliography/device.png)
+
+## Other test with a cleaner breakout board
+![mounting](/Bibliography/Other_test_with_cleaner_setup.jpg)
 
 ## Comparison analog image/what you get with a Game Boy Camera
-![comparison](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/test.gif)
+![comparison](/Bibliography/test.gif)
 
 ## Boot sequence and live raw image
-![comparison](https://github.com/Raphael-Boichot/Game-Boy-camera-sniffer/blob/main/Bibliography/Camera_boot.gif)
+![comparison](/Bibliography/Camera_boot.gif)
 
 This animation shows the boot sequence of the Game Boy Camera when sensor is checked for integrity. It then displays some raw images seen by the sensor when camera is activated. Note that the image has poor contrast as the sensor only uses half of the voltage scale allowed by the MAC-GBD mapper (the lower scale been used as "voltage buffer"). This is corrected in camera by dithering matrices.
 
