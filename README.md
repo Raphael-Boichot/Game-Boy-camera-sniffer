@@ -77,4 +77,4 @@ This animation shows the boot sequence of the Game Boy Camera when sensor is che
 ## Kind warning
 The code comes as it. If you're not happy with the current implementation and the Arduino IDE, build your own and debug it ! Tuning the timing parameters was extremely long and tedious and I won't debug any other variant of the current schematic, of the current code or with another IDE as it is perfectly working.
 
-Push request with tested and working improvements are of course still welcomed.
+Pull request with tested and working improvements are of course still welcomed.
